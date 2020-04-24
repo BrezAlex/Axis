@@ -14,7 +14,10 @@ namespace PodyglomAxis
         private double _speedY;
         private double _x;
         private double _y;
-        private double _t;
+        private double _time;
+        private const double DTime=0.1;
+        private const double K = 0.01;
+        private const double G = 9.81;
         public Form1()
         {
 
@@ -23,15 +26,17 @@ namespace PodyglomAxis
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            _t += 0.05;
-            _x = (float) _speedX * _t;
-            _y = -(float) _speedY * _t - 9.81 * _t * _t / 20;
+            _time += DTime;
+            // x=vx*t
+            _x = (float) _speedX * _time;
+            // y=vy*t-gt^2/20
+            _y = -(float) _speedY * _time - G * _time * _time / 20; 
             if (_y <= 0)
             {
                 timer1.Stop();
                 _x = 0;
                 _y = 0;
-                _t = 0;
+                _time = 0;
             }
             axis1.PixDraw((float) _x, (float) _y, Color.Blue, 0);
             axis1.StatToPic();
@@ -69,17 +74,17 @@ namespace PodyglomAxis
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            _t += 0.1;
-            _speedX -= 0.001 * _speedX * _speedX;
-            _speedY += 9.81 * 0.01;
-            _x += _speedX * 0.1;
-            _y -= _speedY * 0.1;
+            _time += DTime;
+            _speedX -= DTime*DTime*K * _speedX * _speedX;
+            _speedY += G * DTime*DTime;
+            _x += _speedX * DTime;
+            _y -= _speedY * DTime;
             if (_y<=0)
             {
                 timer2.Stop();
                 _x = 0;
                 _y = 0;
-                _t = 0;
+                _time = 0;
             }
             axis1.PixDraw((float)_x, (float)_y, Color.Red, 0);
             axis1.StatToPic();
