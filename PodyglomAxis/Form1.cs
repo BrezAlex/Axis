@@ -16,7 +16,7 @@ namespace PodyglomAxis
         private double _y;
         private double _time;
         private const double DTime=0.1;
-        private const double K = 0.01;
+        private const double K = 0.1;
         private const double G = 9.81;
         public Form1()
         {
@@ -44,8 +44,6 @@ namespace PodyglomAxis
         private void axis1_Load(object sender, EventArgs e)
         {
             axis1.Axis_Type = 3;
-            axis1.x_Name = "Ox";
-            axis1.y_Name = "Oy";
             axis1.x_Base = Width;
             axis1.y_Base = Height;
             axis1.Pix_Size = (float) 0.001;
