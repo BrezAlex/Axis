@@ -17,7 +17,7 @@ namespace PodyglomAxis
         private double _time;
         private const double DTime=0.1;
         private const double K = 0.01;
-        private const double G = 9.81; //
+        private const double G = 9.81;
         public Form1()
         {
 
