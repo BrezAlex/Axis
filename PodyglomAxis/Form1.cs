@@ -26,37 +26,12 @@ namespace PodyglomAxis
         {
             _time += Dtime;
             _x = _speedX * _time;
-            _y = -_speedY * _time - G * _time * _time / 20;
-            Zamenaif();
-            axis1.PixDraw((float)_x, (float)_y, Color.Blue, 0);
-            axis1.StatToPic();
-        }
-        private void axis1_Load(object sender, EventArgs e)
-        {
-            axis1.Axis_Type = 3;
-            axis1.x_Base = 1000;
-            axis1.y_Base = 1000;
-            axis1.Pix_Size = (float)0.001;
-            axis1.AxisDraw();
-        }
-
-        private void button1_MouseClick(object sender, MouseEventArgs e)
-        {
-            InitData();
-            timer1.Start();
-        }
-
-        private void InitData()
-        {
-            var vse = _ygol * Math.PI / 180;
-            double.TryParse(textBox1.Text, out _firstSpeed);
-            double.TryParse(textBox2.Text, out _ygol);
-            _speedX = (_firstSpeed * Math.Cos(vse));
-            _speedY = (_firstSpeed * Math.Sin(-vse));
-        }
-
-        private void Zamenaif()
-        {
+            _y = -_speedY * _time - G * _time * _time / 4;
+            if (checkBox1.Checked)
+            {
+                _speedX -= Dtime * Dtime * K * _speedX * _speedX;
+                _speedY += G * Dtime * Dtime;
+            }
             if (_y <= 0)
             {
                 timer1.Stop();
@@ -64,24 +39,26 @@ namespace PodyglomAxis
                 _y = 0;
                 _time = 0;
             }
-        }
-
-        private void button2_MouseClick(object sender, MouseEventArgs e)
-        {
-            InitData();
-            timer2.Start();
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            _time += Dtime;
-            _speedX -= Dtime * Dtime * K * _speedX * _speedX;
-            _speedY += G * Dtime * Dtime;
-            _x += _speedX * Dtime;
-            _y -= _speedY * Dtime;
-            Zamenaif();
-            axis1.PixDraw((float)_x, (float)_y, Color.Red, 0);
+            axis1.PixDraw((float)_x, (float)_y, Color.Blue, 0);
             axis1.StatToPic();
+        }
+        private void axis1_Load(object sender, EventArgs e)
+        {
+            axis1.Axis_Type = 3;
+            axis1.x_Base = 200;
+            axis1.y_Base = 200;
+            axis1.Pix_Size = (float)0.001;
+            axis1.AxisDraw();
+        }
+
+        private void button1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var vse = _ygol * Math.PI / 180;
+            double.TryParse(textBox1.Text, out _firstSpeed);
+            double.TryParse(textBox2.Text, out _ygol);
+            _speedX = (_firstSpeed * Math.Cos(vse));
+            _speedY = (_firstSpeed * Math.Sin(-vse));
+            timer1.Start();
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -94,7 +71,6 @@ namespace PodyglomAxis
         private void button3_MouseClick(object sender, MouseEventArgs e)
         {
             timer1.Stop();
-            timer2.Stop();
         }
     }
 }
