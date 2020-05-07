@@ -15,22 +15,48 @@ namespace PodyglomAxis
         private double _x;
         private double _y;
         private double _time;
-        private const double DTime=0.1;
+        private const double DTIME = 0.1;
         private const double K = 0.1;
         private const double G = 9.81;
         public Form1()
         {
-
             InitializeComponent();
-           
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            _time += DTime;
-            // x=vx*t
-            _x = (float) _speedX * _time;
-            // y=vy*t-gt^2/20
-            _y = -(float) _speedY * _time - G * _time * _time / 20; 
+            _time += DTIME;
+            _x = _speedX * _time;
+            _y = -_speedY * _time - G * _time * _time / 20;
+            Zamenaif();
+            axis1.PixDraw((float)_x, (float)_y, Color.Blue, 0);
+            axis1.StatToPic();
+        }
+        private void axis1_Load(object sender, EventArgs e)
+        {
+            axis1.Axis_Type = 3;
+            axis1.x_Base = 1000;
+            axis1.y_Base = 1000;
+            axis1.Pix_Size = (float)0.001;
+            axis1.AxisDraw();
+        }
+
+        private void button1_MouseClick(object sender, MouseEventArgs e)
+        {
+            InitData();
+            timer1.Start();
+        }
+
+        private void InitData()
+        {
+            var vse = _ygol * Math.PI / 180;
+            double.TryParse(textBox1.Text, out _firstSpeed);
+            double.TryParse(textBox2.Text, out _ygol);
+            _speedX = (_firstSpeed * Math.Cos(vse));
+            _speedY = (_firstSpeed * Math.Sin(-vse));
+        }
+
+        private void Zamenaif()
+        {
             if (_y <= 0)
             {
                 timer1.Stop();
@@ -38,64 +64,27 @@ namespace PodyglomAxis
                 _y = 0;
                 _time = 0;
             }
-            axis1.PixDraw((float) _x, (float) _y, Color.Blue, 0);
-            axis1.StatToPic();
-        }
-        private void axis1_Load(object sender, EventArgs e)
-        {
-            axis1.Axis_Type = 3;
-            axis1.x_Base = Width;
-            axis1.y_Base = Height;
-            axis1.Pix_Size = (float) 0.001;
-            axis1.AxisDraw();
-        }
-
-        private void button1_MouseClick(object sender, MouseEventArgs e)
-        {
-            var vse = _ygol * Math.PI / 180;
-            double.TryParse(textBox1.Text, out _firstSpeed);
-            double.TryParse(textBox2.Text, out _ygol);
-            _speedX = (float)(_firstSpeed * Math.Cos(vse));
-            _speedY = (float)(_firstSpeed * Math.Sin(-vse));
-            timer1.Start();
         }
 
         private void button2_MouseClick(object sender, MouseEventArgs e)
         {
-            var vse = _ygol * Math.PI / 180;
-            double.TryParse(textBox1.Text, out _firstSpeed);
-            double.TryParse(textBox2.Text, out _ygol);
-            _speedX = (float)(_firstSpeed * Math.Cos(vse));
-            _speedY = (float)(_firstSpeed * Math.Sin(-vse));
+            InitData();
             timer2.Start();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            _time += DTime;
-            _speedX -= DTime*DTime*K * _speedX * _speedX;
-            _speedY += G * DTime*DTime;
-            _x += _speedX * DTime;
-            _y -= _speedY * DTime;
-            if (_y<=0)
-            {
-                timer2.Stop();
-                _x = 0;
-                _y = 0;
-                _time = 0;
-            }
+            _time += DTIME;
+            _speedX -= DTIME * DTIME * K * _speedX * _speedX;
+            _speedY += G * DTIME * DTIME;
+            _x += _speedX * DTIME;
+            _y -= _speedY * DTIME;
+            Zamenaif();
             axis1.PixDraw((float)_x, (float)_y, Color.Red, 0);
             axis1.StatToPic();
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (char.IsDigit(e.KeyChar)) return;
-            if (e.KeyChar == Convert.ToChar(Keys.Back)) return;
-            e.Handled = true;
-        }
-
-        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (char.IsDigit(e.KeyChar)) return;
             if (e.KeyChar == Convert.ToChar(Keys.Back)) return;
