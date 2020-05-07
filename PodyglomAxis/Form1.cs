@@ -15,7 +15,7 @@ namespace PodyglomAxis
         private double _x;
         private double _y;
         private double _time;
-        private const double DTIME = 0.1;
+        private const double Dtime = 0.1;
         private const double K = 0.1;
         private const double G = 9.81;
         public Form1()
@@ -24,7 +24,7 @@ namespace PodyglomAxis
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            _time += DTIME;
+            _time += Dtime;
             _x = _speedX * _time;
             _y = -_speedY * _time - G * _time * _time / 20;
             Zamenaif();
@@ -74,11 +74,11 @@ namespace PodyglomAxis
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            _time += DTIME;
-            _speedX -= DTIME * DTIME * K * _speedX * _speedX;
-            _speedY += G * DTIME * DTIME;
-            _x += _speedX * DTIME;
-            _y -= _speedY * DTIME;
+            _time += Dtime;
+            _speedX -= Dtime * Dtime * K * _speedX * _speedX;
+            _speedY += G * Dtime * Dtime;
+            _x += _speedX * Dtime;
+            _y -= _speedY * Dtime;
             Zamenaif();
             axis1.PixDraw((float)_x, (float)_y, Color.Red, 0);
             axis1.StatToPic();
